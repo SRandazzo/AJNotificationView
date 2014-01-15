@@ -268,18 +268,16 @@ static NSMutableArray *notificationQueue = nil;       // Global notification que
                          self.titleLabel.alpha = 0.0;
                      }
                      completion:^(BOOL finished) {
-                         if (finished) {
-                             [self performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.1f];
+                         [self performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.1f];
+                         
+                         // Remove this notification from the queue
+                         [notificationQueue removeObjectIdenticalTo:self];
+                         
+                         // Show the next notification in the queue
+                         if([notificationQueue count] > 0) {
                              
-                             // Remove this notification from the queue
-                             [notificationQueue removeObjectIdenticalTo:self];
-                             
-                             // Show the next notification in the queue
-                             if([notificationQueue count] > 0) {
-                                 
-                                 AJNotificationView *nextNotification = [notificationQueue objectAtIndex:0];
-                                 [nextNotification showAfterDelay:0];
-                             }
+                             AJNotificationView *nextNotification = [notificationQueue objectAtIndex:0];
+                             [nextNotification showAfterDelay:0];
                          }
                      }];
 }
